@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
+</head>
+<body class="bg-light">
+    <div class="container py-5">
+        <h1 class="display-4 mb-4">{{title}}</h1>
+        <p class="lead mb-5">{{welcome}}</p>
+        
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title mb-4">Your Grocery List</h2>
+                <div id="grocery-list" class="list-group mb-4">
+                    {{#each items}}
+                        <div class="list-group-item">{{this.name}}</div>
+                    {{/each}}
+                </div>
+                
+                <form action="/items" method="POST">
+                    <div class="input-group">
+                        <input type="text" 
+                               id="new-item" 
+                               name="name"
+                               class="form-control" 
+                               placeholder="Add new item...">
+                        <button type="submit" 
+                                class="btn btn-primary">
+                            Add Item
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
