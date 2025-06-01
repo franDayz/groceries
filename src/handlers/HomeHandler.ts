@@ -1,12 +1,12 @@
 import { Context } from 'hono'
 import { renderTemplate } from '../utils/template'
-import { groceryStore } from '../store/groceries'
+import { itemRepository } from '../repositories/ItemRepository'
 
-export const homeHandler = async (c: Context) => {
+export const homeHandler = async (context: Context) => {
   const html = renderTemplate('index', {
     title: 'Grocery List Manager',
     welcome: 'Welcome to your grocery list!',
-    items: groceryStore.getItems()
+    items: itemRepository.findAll()
   })
-  return c.html(html)
+  return context.html(html)
 } 
