@@ -4,7 +4,8 @@ A simple web application to manage your grocery shopping list, built with Hono.j
 
 ## Features
 
-- Add items to your grocery list
+- Create and manage multiple grocery lists
+- Share lists via unique links
 - Responsive design with Bootstrap
 - Real-time updates
 
