@@ -5,4 +5,4 @@ Feature: Grocery Program Management
     And I create a grocery program "Weekly Groceries"
     And I see "Weekly Groceries" as heading
     When I add the item "Bananas"
-    Then I see "Bananas" in the list of items 
+    Then I see "Bananas" in the list of items
