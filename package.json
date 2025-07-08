@@ -9,8 +9,8 @@
     "build": "tsc && npm run copy-views",
     "start": "cross-env NODE_ENV=production node dist/main.js",
     "test": "npm run test:e2e",
-    "test:e2e": "playwright test",
-    "test:unit": "jest"
+    "test:unit": "jest",
+    "test:e2e": "start-server-and-test dev http://localhost:3000 \"cucumber-js --require-module ts-node/register --require features/step_definitions/**/*.ts\""
   },
   "engines": {
     "node": ">=18.0.0"
@@ -19,6 +19,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@cucumber/cucumber": "^11.3.0",
     "@hono/node-server": "^1.14.3",
     "@types/handlebars": "^4.1.0",
     "@types/node": "^22.15.24",
@@ -27,6 +28,7 @@
     "typescript": "^5.8.3"
   },
   "devDependencies": {
+    "@cucumber/cucumber": "^10.0.0",
     "@playwright/test": "^1.52.0",
     "@types/fs-extra": "^11.0.4",
     "@types/jest": "^29.5.14",
@@ -34,7 +36,10 @@
     "fs-extra": "^11.3.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^30.0.0-beta.3",
+    "start-server-and-test": "^2.0.12",
     "ts-jest": "^29.3.4",
-    "tsx": "^4.19.4"
+    "ts-node": "^10.0.0",
+    "tsx": "^4.19.4",
+    "typescript": "^5.0.0"
   }
 }
