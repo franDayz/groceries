@@ -25,6 +25,16 @@ export class ItemRepository {
       }
     }
   }
+
+  getDistinctCategories(): readonly string[] {
+    const categories = new Set<string>()
+    for (const item of this.items.values()) {
+      if (item.category && item.category.trim()) {
+        categories.add(item.category.trim())
+      }
+    }
+    return Array.from(categories).sort()
+  }
 }
 
 export const itemRepository = new ItemRepository() 

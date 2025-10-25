@@ -38,12 +38,18 @@
                                    autofocus>
                         </div>
                         <div class="col-md-4">
-                            <input type="text" 
-                                   id="new-category" 
-                                   name="category"
-                                   class="form-control" 
-                                   placeholder="Category..."
-                                   required>
+                            <div class="position-relative">
+                                <input type="text" 
+                                       id="new-category" 
+                                       name="category"
+                                       class="form-control" 
+                                       placeholder="Category..."
+                                       autocomplete="off"
+                                       required>
+                                <div id="category-suggestions" class="list-group position-absolute w-100" style="display: none; z-index: 1000; max-height: 200px; overflow-y: auto;">
+                                    <!-- Suggestions will be populated here -->
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-2">
                             <button type="submit" 
@@ -56,5 +62,125 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Autocomplete functionality for category field
+        let categories = [];
+        let selectedIndex = -1;
+
+        // Load categories on page load
+        async function loadCategories() {
+            try {
+                const response = await fetch('/categories');
+                const data = await response.json();
+                categories = data.categories || [];
+            } catch (error) {
+                console.error('Failed to load categories:', error);
+            }
+        }
+
+        // Filter categories based on input
+        function filterCategories(input) {
+            if (!input || input.length < 1) return [];
+            return categories.filter(category => 
+                category.toLowerCase().includes(input.toLowerCase())
+            );
+        }
+
+        // Show suggestions dropdown
+        function showSuggestions(filteredCategories) {
+            const suggestionsDiv = document.getElementById('category-suggestions');
+            suggestionsDiv.innerHTML = '';
+            
+            if (filteredCategories.length === 0) {
+                suggestionsDiv.style.display = 'none';
+                return;
+            }
+
+            filteredCategories.forEach((category, index) => {
+                const suggestion = document.createElement('div');
+                suggestion.className = 'list-group-item list-group-item-action';
+                suggestion.textContent = category;
+                suggestion.dataset.index = index;
+                suggestion.addEventListener('click', () => selectCategory(category));
+                suggestionsDiv.appendChild(suggestion);
+            });
+
+            suggestionsDiv.style.display = 'block';
+        }
+
+        // Hide suggestions dropdown
+        function hideSuggestions() {
+            const suggestionsDiv = document.getElementById('category-suggestions');
+            suggestionsDiv.style.display = 'none';
+            selectedIndex = -1;
+        }
+
+        // Select a category
+        function selectCategory(category) {
+            document.getElementById('new-category').value = category;
+            hideSuggestions();
+        }
+
+        // Handle keyboard navigation
+        function handleKeydown(event) {
+            const suggestionsDiv = document.getElementById('category-suggestions');
+            const items = suggestionsDiv.querySelectorAll('.list-group-item');
+            
+            if (event.key === 'ArrowDown') {
+                event.preventDefault();
+                selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
+                updateSelection(items);
+            } else if (event.key === 'ArrowUp') {
+                event.preventDefault();
+                selectedIndex = Math.max(selectedIndex - 1, -1);
+                updateSelection(items);
+            } else if (event.key === 'Enter') {
+                event.preventDefault();
+                if (selectedIndex >= 0 && items[selectedIndex]) {
+                    selectCategory(items[selectedIndex].textContent);
+                }
+            } else if (event.key === 'Escape') {
+                hideSuggestions();
+            }
+        }
+
+        // Update visual selection
+        function updateSelection(items) {
+            items.forEach((item, index) => {
+                if (index === selectedIndex) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        // Initialize autocomplete
+        document.addEventListener('DOMContentLoaded', function() {
+            const categoryInput = document.getElementById('new-category');
+            
+            // Load categories
+            loadCategories();
+            
+            // Handle input changes
+            categoryInput.addEventListener('input', function() {
+                const input = this.value;
+                const filtered = filterCategories(input);
+                showSuggestions(filtered);
+                selectedIndex = -1;
+            });
+            
+            // Handle keyboard events
+            categoryInput.addEventListener('keydown', handleKeydown);
+            
+            // Hide suggestions when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('#new-category') && !event.target.closest('#category-suggestions')) {
+                    hideSuggestions();
+                }
+            });
+        });
+    </script>
 </body>
 </html> 

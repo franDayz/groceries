@@ -21,4 +21,10 @@ export const addGroceryItem = async (context: Context) => {
   itemRepository.save(item)
   
   return context.redirect(`/programs/${programId}`)
+}
+
+export const getCategories = async (context: Context) => {
+  const categories = itemRepository.getDistinctCategories()
+  console.log('Categories in handler function:', categories)
+  return context.json({ categories })
 } 
