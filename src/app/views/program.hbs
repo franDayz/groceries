@@ -16,24 +16,41 @@
                 <h2 class="card-title mb-4">Items</h2>
                 <div id="grocery-list" class="list-group mb-4">
                     {{#each items}}
-                        <div class="list-group-item">{{this.name}}</div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>{{this.name}}</strong>
+                                <small class="text-muted ms-2">({{this.category}})</small>
+                            </div>
+                        </div>
                     {{/each}}
                 </div>
                 
                 <form action="/items" method="POST">
                     <input type="hidden" name="programId" value="{{program.id}}">
-                    <div class="input-group">
-                        <input type="text" 
-                               id="new-item" 
-                               name="name"
-                               class="form-control" 
-                               placeholder="Add new item..."
-                               required
-                               autofocus>
-                        <button type="submit" 
-                                class="btn btn-primary">
-                            Add Item
-                        </button>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <input type="text" 
+                                   id="new-item" 
+                                   name="name"
+                                   class="form-control" 
+                                   placeholder="Item name..."
+                                   required
+                                   autofocus>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" 
+                                   id="new-category" 
+                                   name="category"
+                                   class="form-control" 
+                                   placeholder="Category..."
+                                   required>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" 
+                                    class="btn btn-primary w-100">
+                                Add Item
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>

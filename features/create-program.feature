@@ -4,5 +4,5 @@ Feature: Grocery Program Management
     Given I navigate to the landing page
     And I create a grocery program "Weekly Groceries"
     And I see "Weekly Groceries" as heading
-    When I add the item "Bananas"
+    When I add the item "Bananas" with category "Fruits"
     Then I see "Bananas" in the list of items

@@ -16,9 +16,10 @@ Given('I see {string} as heading', async function (heading: string) {
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(heading);
 });
 
-When('I add the item {string}', async function (itemName: string) {
+When('I add the item {string} with category {string}', async function (itemName: string, category: string) {
   await expect(page.locator('#new-item')).toBeVisible();
   await page.fill('#new-item', itemName);
+  await page.fill('#new-category', category);
   await page.click('form[action="/items"] button[type="submit"]');
 });
 
