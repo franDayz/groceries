@@ -87,7 +87,7 @@
 
         // Filter categories based on input
         function filterCategories(input) {
-            if (!input || input.length < 1) return [];
+            if (!input || input.length < 1) return categories;
             return categories.filter(category => 
                 category.toLowerCase().includes(input.toLowerCase())
             );
@@ -175,6 +175,13 @@
                 const filtered = filterCategories(input);
                 showSuggestions(filtered);
                 selectedIndex = -1;
+            });
+            
+            // Handle focus to show all categories when empty
+            categoryInput.addEventListener('focus', function() {
+                if (!this.value) {
+                    showSuggestions(categories);
+                }
             });
             
             // Handle keyboard events
