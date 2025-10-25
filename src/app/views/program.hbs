@@ -14,12 +14,18 @@
         <div class="card">
             <div class="card-body">
                 <h2 class="card-title mb-4">Items</h2>
-                <div id="grocery-list" class="list-group mb-4">
-                    {{#each items}}
-                        <div class="list-group-item d-flex justify-content-between align-items-center">
-                            <div>
-                                <strong>{{this.name}}</strong>
-                                <small class="text-muted ms-2">({{this.category}})</small>
+                <div id="grocery-list" class="mb-4">
+                    {{#each itemsByCategory}}
+                        <div class="mb-3">
+                            <h5 class="text-primary border-bottom pb-2 mb-2">{{@key}}</h5>
+                            <div class="list-group">
+                                {{#each this}}
+                                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <strong>{{this.name}}</strong>
+                                        </div>
+                                    </div>
+                                {{/each}}
                             </div>
                         </div>
                     {{/each}}

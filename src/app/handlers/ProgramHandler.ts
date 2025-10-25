@@ -14,8 +14,18 @@ export const viewProgram = async (context: Context) => {
 
   groceryProgramRepository.save(updateLastAccessed(program))
   const items = itemRepository.findByProgramId(id)
+  
+  // Group items by category
+  const itemsByCategory = items.reduce((groups, item) => {
+    const category = item.category || 'Uncategorized'
+    if (!groups[category]) {
+      groups[category] = []
+    }
+    groups[category].push(item)
+    return groups
+  }, {} as Record<string, typeof items>)
 
-  const html = renderTemplate('program', { program, items })
+  const html = renderTemplate('program', { program, items, itemsByCategory })
   return context.html(html)
 }
 

@@ -6,3 +6,4 @@ Feature: Grocery Program Management
     And I see "Weekly Groceries" as heading
     When I add the item "Bananas" with category "Fruits"
     Then I see "Bananas" in the list of items
+    And I see items grouped by category
