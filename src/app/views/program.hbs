@@ -21,8 +21,17 @@
                             <div class="list-group">
                                 {{#each this}}
                                     <div class="list-group-item d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <strong>{{this.name}}</strong>
+                                        <div class="d-flex align-items-center">
+                                            <div class="form-check form-switch me-3">
+                                                <input class="form-check-input stock-toggle" 
+                                                       type="checkbox" 
+                                                       role="switch"
+                                                       data-item-id="{{this.id}}"
+                                                       {{#if this.inStock}}checked{{/if}}>
+                                            </div>
+                                            <span class="{{#if this.inStock}}text-success{{else}}text-muted{{/if}}">
+                                                <strong>{{this.name}}</strong>
+                                            </span>
                                         </div>
                                     </div>
                                 {{/each}}
@@ -191,6 +200,60 @@
             document.addEventListener('click', function(event) {
                 if (!event.target.closest('#new-category') && !event.target.closest('#category-suggestions')) {
                     hideSuggestions();
+                }
+            });
+            
+            // Handle stock toggle changes
+            document.addEventListener('change', function(event) {
+                if (event.target.classList.contains('stock-toggle')) {
+                    const itemId = event.target.dataset.itemId;
+                    const inStock = event.target.checked;
+                    const label = event.target.closest('.list-group-item').querySelector('span');
+                    
+                    // Update visual state immediately
+                    if (inStock) {
+                        label.classList.remove('text-muted');
+                        label.classList.add('text-success');
+                    } else {
+                        label.classList.remove('text-success');
+                        label.classList.add('text-muted');
+                    }
+                    
+                    // Send PATCH request to update server
+                    fetch(`/items/${itemId}`, {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ inStock: Boolean(inStock) })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.success) {
+                            // Revert on error
+                            event.target.checked = !inStock;
+                            if (inStock) {
+                                label.classList.remove('text-success');
+                                label.classList.add('text-muted');
+                            } else {
+                                label.classList.remove('text-muted');
+                                label.classList.add('text-success');
+                            }
+                            console.error('Failed to update item stock:', data.error);
+                        }
+                    })
+                    .catch(error => {
+                        // Revert on error
+                        event.target.checked = !inStock;
+                        if (inStock) {
+                            label.classList.remove('text-success');
+                            label.classList.add('text-muted');
+                        } else {
+                            label.classList.remove('text-muted');
+                            label.classList.add('text-success');
+                        }
+                        console.error('Error updating item stock:', error);
+                    });
                 }
             });
         });

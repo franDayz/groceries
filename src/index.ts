@@ -2,7 +2,7 @@ import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
 import { serveStatic } from '@hono/node-server/serve-static'
 import { homeHandler } from './app/handlers/HomeHandler'
-import { addGroceryItem, getCategories } from './app/handlers/ItemHandlers'
+import { addGroceryItem, getCategories, updateItemStock } from './app/handlers/ItemHandlers'
 import { viewProgram, createNewProgram, showNewProgramForm } from './app/handlers/ProgramHandler'
 
 const app = new Hono()
@@ -14,6 +14,7 @@ app.use('/static/*', serveStatic({ root: './' }))
 app.get('/', homeHandler)
 app.get('/categories', getCategories)
 app.post('/items', addGroceryItem)
+app.patch('/items/:id', updateItemStock)
 
 // Program routes
 app.get('/programs/new', showNewProgramForm)

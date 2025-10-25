@@ -30,4 +30,19 @@ Then('I see {string} in the list of items', async function (itemName: string) {
 Then('I see items grouped by category', async function () {
   await expect(page.locator('h5.text-primary')).toBeVisible();
   await expect(page.locator('#grocery-list .list-group')).toBeVisible();
+});
+
+When('I toggle the stock status of {string}', async function (itemName: string) {
+  const itemElement = page.locator('.list-group-item', { hasText: itemName });
+  const toggle = itemElement.locator('.stock-toggle');
+  await toggle.click();
+});
+
+Then('I see {string} is marked as in stock', async function (itemName: string) {
+  const itemElement = page.locator('.list-group-item', { hasText: itemName });
+  const toggle = itemElement.locator('.stock-toggle');
+  
+  // Wait for the toggle to be checked and the span to have success styling
+  await expect(toggle).toBeChecked({ timeout: 10000 });
+  await expect(itemElement.locator('span')).toHaveClass(/text-success/, { timeout: 10000 });
 }); 

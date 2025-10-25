@@ -7,3 +7,5 @@ Feature: Grocery Program Management
     When I add the item "Bananas" with category "Fruits"
     Then I see "Bananas" in the list of items
     And I see items grouped by category
+    When I toggle the stock status of "Bananas"
+    Then I see "Bananas" is marked as in stock

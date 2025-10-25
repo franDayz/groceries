@@ -25,6 +25,22 @@ export const addGroceryItem = async (context: Context) => {
 
 export const getCategories = async (context: Context) => {
   const categories = itemRepository.getDistinctCategories()
-  console.log('Categories in handler function:', categories)
   return context.json({ categories })
+}
+
+export const updateItemStock = async (context: Context) => {
+  const id = context.req.param('id')
+  const { inStock } = await context.req.parseBody()
+  
+  const inStockBoolean = inStock === 'true'
+
+  const item = itemRepository.findById(id)
+  if (!item) {
+    return context.json({ error: 'Item not found' }, 404)
+  }
+
+  const updatedItem = { ...item, inStock: inStockBoolean }
+  itemRepository.save(updatedItem)
+  
+  return context.json({ success: true, item: updatedItem })
 } 

@@ -3,6 +3,7 @@ export type Item = Readonly<{
   programId: string
   name: string
   category: string
+  inStock: boolean
   createdAt: Date
 }>
 
@@ -16,5 +17,6 @@ export const createItem = (
   programId,
   name,
   category,
+  inStock: false,
   createdAt: new Date()
 })
