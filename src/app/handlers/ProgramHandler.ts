@@ -2,6 +2,7 @@ import { Context } from 'hono'
 import { groceryProgramRepository } from '../repositories/GroceryProgramRepository'
 import { itemRepository } from '../repositories/ItemRepository'
 import { updateLastAccessed, createProgram } from '../../domain/GroceryProgram'
+import { Item } from '../../domain/Item'
 import { renderTemplate } from '../utils/template'
 
 export const viewProgram = async (context: Context) => {
@@ -15,15 +16,14 @@ export const viewProgram = async (context: Context) => {
   groceryProgramRepository.save(updateLastAccessed(program))
   const items = itemRepository.findByProgramId(id)
   
-  // Group items by category
   const itemsByCategory = items.reduce((groups, item) => {
     const category = item.category || 'Uncategorized'
     if (!groups[category]) {
       groups[category] = []
     }
-    groups[category].push(item)
+    groups[category] = [...groups[category], item]
     return groups
-  }, {} as Record<string, typeof items>)
+  }, {} as Record<string, Item[]>)
 
   const html = renderTemplate('program', { program, items, itemsByCategory })
   return context.html(html)

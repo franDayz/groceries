@@ -3,15 +3,12 @@ import { expect } from '@playwright/test';
 import { page } from '../support/world';
 
 Given('I have items with categories {string}, {string}, and {string}', async function (category1: string, category2: string, category3: string) {
-  // Create a test program first
   await page.goto('http://localhost:3000/');
   await page.fill('#name', 'Test Program');
   await page.click('button[type="submit"]');
   
-  // Wait for the program page to load
   await page.waitForSelector('#new-item');
   
-  // Add items with different categories through the web interface
   await page.fill('#new-item', 'Apple');
   await page.fill('#new-category', category1);
   await page.click('form[action="/items"] button[type="submit"]');
@@ -28,13 +25,9 @@ Given('I have items with categories {string}, {string}, and {string}', async fun
 When('I request the categories endpoint', async function () {
   const response = await page.request.get('http://localhost:3000/categories');
   this.categoriesResponse = await response.json();
-  console.log('Categories response:', this.categoriesResponse);
 });
 
 Then('I should receive a list of categories containing {string}, {string}, and {string}', async function (category1: string, category2: string, category3: string) {
-  console.log('Expected categories:', [category1, category2, category3]);
-  console.log('Received categories:', this.categoriesResponse.categories);
-  
   expect(this.categoriesResponse.categories).toBeDefined();
   expect(this.categoriesResponse.categories).toContain(category1);
   expect(this.categoriesResponse.categories).toContain(category2);

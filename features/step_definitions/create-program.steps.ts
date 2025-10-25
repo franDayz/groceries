@@ -28,9 +28,6 @@ Then('I see {string} in the list of items', async function (itemName: string) {
 });
 
 Then('I see items grouped by category', async function () {
-  // Check that category headers exist
   await expect(page.locator('h5.text-primary')).toBeVisible();
-  
-  // Check that items are organized under category sections (excluding autocomplete dropdown)
   await expect(page.locator('#grocery-list .list-group')).toBeVisible();
 }); 
